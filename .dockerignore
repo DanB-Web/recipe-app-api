@@ -1,0 +1,19 @@
+# Ignore these when building image - the 'Docker Context'
+
+# Git
+.git
+.gitignore
+
+# Docker files only required on local maching
+.docker
+
+# Python caching files 
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+
+# Local environment settings - Docker has own in Dockerfile / docker-compose etc
+.env/
+.venv/
+venv/
