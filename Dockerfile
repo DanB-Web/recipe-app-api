@@ -17,7 +17,7 @@ COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
 
-# The docker-compose file has a DEV=true argument for dev mode, which installs the dev deps in requirements.dev.txt
+# The docker-compose file has a DEV=true env argument for dev mode, which installs the dev deps in requirements.dev.txt
 # Setting this to false here allows us to skip installing dev dependenices if building direct from Dockerfile (see RUN command below)
 ARG DEV=false
 
@@ -29,10 +29,10 @@ ARG DEV=false
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
-    if [$DEV = "true"]; \
+    if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
-    # rm -rf /tmp && \
+    rm -rf /tmp && \
     adduser \
         --disabled-password \
         --no-create-home \
