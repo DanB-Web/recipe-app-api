@@ -26,24 +26,32 @@ ARG DEV=false
 # This RUN command creates a virtual env, installs & updates pip, installs dependencies, removes the now unrequired dir and adds a new user 
 # Note we are also disabling password access and preventing a home directory bewing created
 # It's recommended to create a new user rather than use root
+
+# Note apk is Alpine Package Keeper - package manager for Alpine Lunux distro https://docs.alpinelinux.org/user-handbook/0.1a/Working/apk.html
+
+# Create Python venv in a directory called 'py'
 RUN python -m venv /py && \
+    # Install pip and run upgrade command
     /py/bin/pip install --upgrade pip && \
+    #  Add postgres-client and don't cache anything (save image size)
     apk add --update --no-cache postgresql-client && \
-    apk add --update --no-cache --virtual .tmp-build-deps \
-        build-base postgresql-dev musl-dev && \
+    #  Add build deps in a virtual env - easier to remove later
+    apk add --update --no-cache --virtual .tmp-build-deps build-base postgresql-dev musl-dev && \
+    # Install requirements.txt
     /py/bin/pip install -r /tmp/requirements.txt && \
+    # If in dev, also install dev dependencies
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
+    # Remove tmp directory and all children
     rm -rf /tmp && \
+    # Delete virtual env
     apk del .tmp-build-deps && \
-    adduser \
-        --disabled-password \
-        --no-create-home \
-        django-user
+    # Add a new django user
+    adduser --disabled-password --no-create-home django-user
 
 # Add Python executables to system path - allows them to be run from terminal
 ENV PATH="/py/bin:$PATH"
 
-# Specify the user to switch too after the image is build
+# Specify the user to switch to after the image is build
 USER django-user

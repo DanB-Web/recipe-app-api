@@ -4,7 +4,7 @@ version: "3.9"
 services:
   # Name of service
   app:
-    # Location of relavant Dockerfile for build
+    # Location of relavant Dockerfile for build, and any args to pass to it
     build:
       context: .
       args:
@@ -21,7 +21,7 @@ services:
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=db # Service name 'db' - culd also use Docker IP
+      - DB_HOST=db # Service name 'db' - could also use Docker IP
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=changeme

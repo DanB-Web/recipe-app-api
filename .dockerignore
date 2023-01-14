@@ -4,7 +4,7 @@
 .git
 .gitignore
 
-# Docker files only required on local maching
+# Docker files only required on local machine
 .docker
 
 # Python caching files 
